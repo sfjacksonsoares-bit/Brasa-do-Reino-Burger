@@ -1,0 +1,278 @@
+/* =========================================
+   1. VARIÁVEIS E RESET
+   ========================================= */
+:root {
+    --cor-primaria: #1A1A1A;
+    --cor-secundaria: #F5F5F5;
+    --cor-acento: #FF8C00; /* Âmbar / Fogo */
+    --cor-acento-hover: #E67E00;
+    --gradiente-principal: linear-gradient(135deg, #FF8C00 0%, #FF4500 100%);
+    --sombra-suave: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --sombra-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --borda-arredondada: 16px;
+    --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Tipografia com clamp() para responsividade fluida */
+    --fonte-titulo: 'Montserrat', sans-serif;
+    --fonte-corpo: 'Open Sans', sans-serif;
+    --h1-size: clamp(2.5rem, 6vw, 4.5rem);
+    --h2-size: clamp(2rem, 4vw, 3rem);
+    --p-size: clamp(1rem, 1.5vw, 1.125rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--fonte-corpo);
+    font-size: var(--p-size);
+    color: var(--cor-primaria);
+    background-color: #FFFFFF;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Acessibilidade: Redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, .card-hover, .gallery-item img { transition: none !important; animation: none !important; }
+}
+
+/* =========================================
+   2. UTILITÁRIOS
+   ========================================= */
+.container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.narrow-container { max-width: 800px; }
+.text-accent { color: var(--cor-acento); }
+.text-gradient {
+    background: var(--gradiente-principal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.text-center { text-align: center; }
+.mt-4 { margin-top: 2rem; }
+.mb-2 { margin-bottom: 1rem; }
+.bg-dark { background-color: var(--cor-primaria); color: var(--cor-secundaria); }
+.bg-light { background-color: var(--cor-secundaria); }
+
+.section { padding: clamp(60px, 10vw, 120px) 0; }
+.section-title {
+    font-family: var(--fonte-titulo);
+    font-size: var(--h2-size);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+/* =========================================
+   3. ANIMAÇÕES (Scroll Reveal)
+   ========================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+
+/* =========================================
+   4. COMPONENTES
+   ========================================= */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.875rem 2rem; border-radius: 50px; font-family: var(--fonte-titulo);
+    font-weight: 700; text-decoration: none; cursor: pointer; border: 2px solid transparent;
+    transition: var(--transicao); position: relative; overflow: hidden;
+}
+.btn-primary {
+    background: var(--gradiente-principal); color: white;
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+}
+.btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 140, 0, 0.6);
+}
+/* Efeito de brilho no hover */
+.btn-primary::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.5s;
+}
+.btn-primary:hover::after { left: 100%; }
+
+.btn-outline {
+    background: transparent; color: white; border-color: white;
+}
+.btn-outline:hover { background: white; color: var(--cor-primaria); }
+.btn-lg { padding: 1.1rem 2.5rem; font-size: 1.1rem; }
+.btn-block { width: 100%; }
+
+/* =========================================
+   5. HEADER & GLASSMORPHISM
+   ========================================= */
+.header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+    padding: 1.5rem 0; transition: var(--transicao);
+}
+.header.scrolled {
+    background: rgba(26, 26, 26, 0.85);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    padding: 1rem 0; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.header-container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: var(--fonte-titulo); font-size: 1.5rem; font-weight: 800; color: white; text-decoration: none; }
+.nav-menu ul { display: flex; list-style: none; gap: 2rem; align-items: center; }
+.nav-menu a { color: white; text-decoration: none; font-weight: 600; transition: var(--transicao); }
+.nav-menu a:hover { color: var(--cor-acento); }
+
+.mobile-menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+.hamburger { display: block; width: 25px; height: 3px; background: white; position: relative; transition: var(--transicao); }
+.hamburger::before, .hamburger::after { content: ''; position: absolute; width: 25px; height: 3px; background: white; transition: var(--transicao); }
+.hamburger::before { top: -8px; } .hamburger::after { top: 8px; }
+
+/* =========================================
+   6. HERO SECTION
+   ========================================= */
+.hero {
+    position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center;
+    background: url('https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+}
+.hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 100%);
+}
+.hero-content { position: relative; z-index: 2; color: white; max-width: 700px; }
+.badge-trust {
+    display: inline-block; background: rgba(255, 140, 0, 0.2); color: var(--cor-acento);
+    padding: 0.5rem 1rem; border-radius: 50px; font-weight: 700; font-size: 0.9rem;
+    margin-bottom: 1.5rem; border: 1px solid rgba(255, 140, 0, 0.3);
+}
+.hero-title { font-family: var(--fonte-titulo); font-size: var(--h1-size); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
+.hero-subtitle { font-size: var(--p-size); margin-bottom: 2.5rem; opacity: 0.9; max-width: 550px; }
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* =========================================
+   7. GRID & CARDS
+   ========================================= */
+.grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.grid-3-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+
+.image-wrapper img { width: 100%; border-radius: var(--borda-arredondada); box-shadow: var(--sombra-suave); }
+
+.card {
+    background: white; border-radius: var(--borda-arredondada); overflow: hidden;
+    box-shadow: var(--sombra-suave); transition: var(--transicao); color: var(--cor-primaria);
+}
+.card-hover:hover { transform: translateY(-10px); box-shadow: var(--sombra-hover); }
+.card-image img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s ease; }
+.card-hover:hover .card-image img { transform: scale(1.05); }
+.card-body { padding: 1.5rem; }
+.card-body h3 { font-family: var(--fonte-titulo); font-size: 1.25rem; margin-bottom: 0.5rem; }
+.card-body p { font-size: 0.95rem; color: #666; margin-bottom: 1rem; }
+.price { font-family: var(--fonte-titulo); font-size: 1.5rem; font-weight: 800; color: var(--cor-acento); }
+
+/* =========================================
+   8. GALERIA
+   ========================================= */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.gallery-item { border-radius: var(--borda-arredondada); overflow: hidden; height: 250px; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.gallery-item:hover img { transform: scale(1.1); }
+
+/* =========================================
+   9. DEPOIMENTOS & FAQ
+   ========================================= */
+.testimonial-card {
+    background: white; padding: 2rem; border-radius: var(--borda-arredondada);
+    box-shadow: var(--sombra-suave); font-style: italic;
+}
+.testimonial-card footer { margin-top: 1rem; font-weight: 700; font-style: normal; color: var(--cor-acento); }
+
+.accordion-item { border-bottom: 1px solid #ddd; }
+.accordion-header {
+    width: 100%; text-align: left; padding: 1.5rem 0; background: none; border: none;
+    font-family: var(--fonte-titulo); font-size: 1.1rem; font-weight: 600; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; color: var(--cor-primaria);
+}
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+.accordion-content p { padding-bottom: 1.5rem; color: #555; }
+.accordion-header[aria-expanded="true"] .icon { transform: rotate(45deg); }
+.accordion-header[aria-expanded="true"] { color: var(--cor-acento); }
+
+/* =========================================
+   10. FORMULÁRIO (Floating Labels)
+   ========================================= */
+.form-wrapper { background: white; padding: 2.5rem; border-radius: var(--borda-arredondada); box-shadow: var(--sombra-suave); }
+.form-title { font-family: var(--fonte-titulo); margin-bottom: 1.5rem; color: var(--cor-primaria); }
+.floating-form .form-group { position: relative; margin-bottom: 1.5rem; }
+.floating-form input, .floating-form textarea {
+    width: 100%; padding: 1rem 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px;
+    font-size: 1rem; background: transparent; transition: var(--transicao); outline: none;
+}
+.floating-form label {
+    position: absolute; left: 0.75rem; top: 1rem; color: #888; pointer-events: none;
+    transition: var(--transicao); background: white; padding: 0 0.25rem;
+}
+.floating-form input:focus, .floating-form textarea:focus { border-color: var(--cor-acento); }
+.floating-form input:focus + label,
+.floating-form input:not(:placeholder-shown) + label,
+.floating-form textarea:focus + label,
+.floating-form textarea:not(:placeholder-shown) + label {
+    top: -0.6rem; font-size: 0.85rem; color: var(--cor-acento); font-weight: 600;
+}
+
+/* =========================================
+   11. FOOTER & WHATSAPP FLUTUANTE
+   ========================================= */
+.footer { background: #111; color: #888; padding: 3rem 0; text-align: center; }
+.footer .logo { color: white; }
+.footer .small { font-size: 0.85rem; margin-top: 0.5rem; }
+
+.whatsapp-float {
+    position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px;
+    background: #25D366; color: white; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    z-index: 999; transition: var(--transicao); text-decoration: none;
+}
+.whatsapp-float:hover { transform: scale(1.1); }
+.whatsapp-tooltip {
+    position: absolute; right: 70px; background: white; color: #333; padding: 0.5rem 1rem;
+    border-radius: 8px; font-size: 0.9rem; font-weight: 600; white-space: nowrap;
+    box-shadow: var(--sombra-suave); opacity: 0; pointer-events: none; transition: var(--transicao);
+}
+.whatsapp-float:hover .whatsapp-tooltip { opacity: 1; transform: translateX(-10px); }
+
+/* Cookie Banner */
+.cookie-banner {
+    position: fixed; bottom: 0; left: 0; width: 100%; background: var(--cor-primaria);
+    color: white; padding: 1rem; display: flex; justify-content: center; align-items: center;
+    gap: 1rem; z-index: 1001; transform: translateY(100%); transition: transform 0.5s ease;
+}
+.cookie-banner.show { transform: translateY(0); }
+.cookie-banner a { color: var(--cor-acento); }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.9rem; }
+
+/* =========================================
+   12. RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 768px) {
+    .grid-2-col { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-cta { flex-direction: column; }
+    .btn-lg { width: 100%; }
+    
+    .mobile-menu-toggle { display: block; z-index: 1002; }
+    .nav-menu {
+        position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+        background: var(--cor-primaria); flex-direction: column; justify-content: center;
+        transition: var(--transicao); padding: 2rem;
+    }
+    .nav-menu.active { right: 0; }
+    .nav-menu ul { flex-direction: column; gap: 2rem; }
+    
+    .whatsapp-float { bottom: 1.5rem; right: 1.5rem; width: 50px; height: 50px; }
+    .whatsapp-tooltip { display: none; } /* Esconde tooltip no mobile para não atrapalhar */
+}
